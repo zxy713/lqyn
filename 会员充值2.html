@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员服务</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+          /* 修改容器样式 */
+    .container {
+        padding: 2rem;
+        max-width: 1000px; /* 缩小容器宽度 */
+        margin: 0 auto;
+    }
+
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 强制两列布局 */
+        gap: 1.5rem; /* 缩小间距 */
+        padding: 2rem 0;
+    }
+
+    /* 新增卡片等高效果 */
+    .membership-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* 调整价格样式 */
+    .price {
+        font-size: 2.2rem;
+        margin: 1rem 0;
+    }
+
+    /* 增加卡片差异色 */
+    .membership-card:nth-child(2) {
+        background: linear-gradient(135deg, #f8f9fa, #fff);
+        border: 2px solid #ffd700;
+    }
+
+    /* 调整推荐标签样式 */
+    .vip-badge {
+        background: linear-gradient(45deg, #ffd700, #ffecb3);
+        font-size: 0.9rem;
+    }
+
+    /* 优化按钮布局 */
+    .btn-subscribe {
+        margin-top: auto; /* 按钮始终在底部 */
+    }
+
+    @media (max-width: 768px) {
+        .card-container {
+            grid-template-columns: 1fr; /* 移动端单列布局 */
+            gap: 1rem;
+        }
+        
+        .container {
+            padding: 1rem;
+            max-width: 95%;
+        }
+        
+        .membership-card {
+            padding: 1.5rem;
+        }
+    }
+
+    /* 新增价格对比强调 */
+    .price::before {
+        content: "¥";
+        font-size: 1.2rem;
+        vertical-align: super;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f5f5;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            text-decoration: none;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            border: 2px solid #fff;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .membership-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .membership-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin: 1.5rem 0;
+            font-weight: bold;
+        }
+
+        .benefits {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .benefits li {
+            padding: 0.8rem 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .benefits i {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            color: #4CAF50;
+            min-width: 25px;
+        }
+
+        .btn-subscribe {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-subscribe:hover {
+            background: #45a049;
+        }
+
+        .vip-badge {
+            background: #ffd700;
+            color: #2c3e50;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .price {
+                font-size: 2rem;
+            }
+        }
+
+        .attention-text {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="主界面.html" class="back-button">&lt;</a>
+    
+    <div class="container">
+        <div class="card-container">
+            <!-- 基础会员 -->
+            <div class="membership-card">
+                <div class="card-header">
+                    <h2>基础会员</h2>
+                    <div class="price">¥38/月</div>
+                </div>
+                <ul class="benefits">
+                    <li><i class="fas fa-check-circle"></i>每日健康提醒</li>
+                    <li><i class="fas fa-check-circle"></i>基础健康课程</li>
+                    <li><i class="fas fa-check-circle"></i>每周健康报告</li>
+                    <li><i class="fas fa-check-circle"></i>专属客服支持</li>
+                </ul>
+                <button class="btn-subscribe">立即开通</button>
+            </div>
+
+            <!-- 尊享会员 -->
+            <div class="membership-card">
+                <div class="card-header">
+                    <div class="vip-badge">推荐选择</div>
+                    <h2>尊享会员</h2>
+                    <div class="price">¥98/月</div>
+                </div>
+                <ul class="benefits">
+                    <li><i class="fas fa-star"></i>24小时医生咨询</li>
+                    <li><i class="fas fa-star"></i>全套健康课程</li>
+                    <li><i class="fas fa-star"></i>每日健康监测</li>
+                    <li><i class="fas fa-star"></i>优先客服通道</li>
+                </ul>
+                <button class="btn-subscribe">尊享服务</button>
+            </div>
+        </div>
+
+        <div class="attention-text">
+            <i class="fas fa-info-circle"></i> 温馨提示：所有会员服务自动续费可随时取消，如有疑问请拨打客服电话 400-123-4567
+        </div>
+    </div>
+
+    <script>
+        // 增加按钮点击反馈
+        document.querySelectorAll('.btn-subscribe').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+
+        // 增大可点击区域
+        document.querySelectorAll('li').forEach(li => {
+            li.style.cursor = 'pointer';
+            li.addEventListener('click', () => {
+                li.style.backgroundColor = '#f8f9fa';
+                setTimeout(() => {
+                    li.style.backgroundColor = 'transparent';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
