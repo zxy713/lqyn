@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐庆余年 - 社交版</title>
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff3e6, #ffe5cc);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* 顶部导航栏 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .ai-chat-btn {
+            width: 80px;
+            height: 80px;
+            background: url('ai-icon.png') no-repeat center/60%;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .ai-chat-btn:active {
+            transform: scale(0.95);
+        }
+
+        .search-box {
+            flex: 0.6;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 25px;
+            border: 2px solid #ff9966;
+            font-size: 1.2rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255,153,102,0.3);
+        }
+
+        .search-btn {
+            width: 60px;
+            height: 60px;
+            margin-left: 10px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #ff9966;
+            color: white;
+        }
+
+        /* 动态消息区 */
+        .feed-container {
+            height: 50vh;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .post-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: start;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .post-actions button {
+            margin-right: 15px;
+            padding: 6px 12px;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .post-actions button:hover {
+            background: #ff9966;
+            color: white;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item i {
+            font-size: 32px;
+            margin-bottom: 5px;
+            color: #ff9966;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 153, 102, 0.3);
+        }
+
+        .nav-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+
+        /* 动画特效 */
+        @keyframes ripple {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes coin-bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .recharge:hover i {
+            animation: coin-bounce 0.6s ease;
+        }
+        /* 来看樱花文章样式 */
+.article-post {
+    animation: slideIn 1s ease-out;
+    background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+    border-left: 4px solid #ff69b4;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.article-title {
+    color: #e94f7c;
+    font-size: 1.4em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.image-frame {
+    position: relative;
+    margin: 15px 0;
+    padding: 8px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.sakura-image {
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.sakura-image:hover {
+    transform: scale(1.02);
+}
+
+.highlight {
+    background: #fff0f6;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px dashed #ff85c0;
+}
+
+.loading {
+    background: #f8f8f8;
+    min-height: 200px;
+}
+                                /* 背景图样式 */
+/* 修改body样式 */
+body {
+        position: relative;
+        min-height: 100vh;
+        padding: 15px;
+    }
+
+    /* 添加背景层 */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('背景图.jpg') center/cover no-repeat;
+        opacity: 0.15; /* 控制透明度 */
+        z-index: -1; /* 确保在内容层下方 */
+        pointer-events: none; /* 防止干扰交互 */
+    }
+
+    /* 原有body样式调整 */
+    body {
+        background: linear-gradient(135deg, rgba(255,243,230,0.8), rgba(255,229,204,0.8));
+    }
+
+    /* 增强内容区域的可读性 */
+    .feed-container,
+    .nav-item,
+    .search-input,
+    .ai-chat-btn {
+        background-color: rgba(255, 255, 255, 0.85); /* 半透明白色背景 */
+        backdrop-filter: blur(5px); /* 毛玻璃效果 */
+    }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="top-bar">
+        <button class="ai-chat-btn" 
+                style="background-color: #ff9966;"
+                onclick="window.location.href='AI陪聊.html'">AI</button>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜索动态或好友...">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="feed-container" id="feed">
+        <div class="feed-container" id="feed">
+            <!-- 新增的樱花文章 -->
+            <div class="post-item article-post">
+                <img src="shanghua.jpg" class="user-avatar">
+                <div class="article-container">
+                    <h3>春意盎然</h3>
+                    <div class="article-content">
+                        <h2 class="article-title">🌸 来看樱花 | 家门口的浪漫盛宴</h2>
+                        <p class="animate-text">春风十里，不如樱花满枝头！怀化学院的染井吉野樱已进入盛放期，粉白花瓣如云似霞...</p>
+                        <div class="image-frame">
+                            <!-- 这里插入图片 -->
+                            <img src="sakura.webp" class="sakura-image loading" alt="樱花盛放">
+                        </div>
+                        <p class="highlight">📅 最佳观赏期：即日起至3月25日<br>
+                        📍 位置：鹤城区怀化学院东校区<br>
+                        🎉 本周六将举办「樱花摄影课堂」</p>
+                    </div>
+                    <div class="post-actions">
+                        <button>👍 52</button>
+                        <button>💬 24</button>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- 原有其他动态消息保持不变 -->
+            ...
+        </div>
+        <!-- 动态消息 -->
+        <div class="post-item">
+            <img src="user1.jpg" class="user-avatar">
+            <div>
+                <h3>心如止水</h3>
+                <p>今天在公园打太极，有一起的伙伴吗？🌞</p>
+                <div class="post-actions">
+                    <button>👍 12</button>
+                    <button>💬 3</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <img src="user2.jpg" class="user-avatar">
+            <div>
+                <h3>爱笑爱长寿</h3>
+                <p>刚学了新编的广场舞，明天早上7点文化广场教学！💃</p>
+                <div class="post-actions">
+                    <button>👍 28</button>
+                    <button>💬 15</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <img src="user6.jpg" class="user-avatar">
+            <div>
+                <h3>细菌的生命力</h3>
+                <p>钓鱼收获满满！🎣 有要鲫鱼的邻居吗？免费送两条～</p>
+                <div class="post-actions">
+                    <button>👍 45</button>
+                    <button>💬 22</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <img src="user4.jpg" class="user-avatar">
+            <div>
+                <h3>平安喜乐</h3>
+                <p>老年大学书法班开新课啦！报名从速 📚 墨宝镇楼 ✍️</p>
+                <div class="post-actions">
+                    <button>👍 33</button>
+                    <button>💬 18</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <img src="user5.jpg" class="user-avatar">
+            <div>
+                <h3>上善若水</h3>
+                <p>闲置象棋棋盘赠送，带磁力折叠款，需要的私信～ ♟️</p>
+                <div class="post-actions">
+                    <button>👍 17</button>
+                    <button>💬 6</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <img src="user3.jpg" class="user-avatar">
+            <div>
+                <h3>好像有羊叫</h3>
+                <p>组团去郊区采摘草莓啦！🚗 本周六出发，3个空位～</p>
+                <div class="post-actions">
+                    <button>👍 39</button>
+                    <button>💬 12</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <div class="nav-item recharge" onclick="handleNavClick('会员充值2.html')">
+            <i class="fas fa-coins"></i>
+            <span>充值</span>
+        </div>
+        <div class="nav-item nearby" onclick="handleNavClick('地图2.html')">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>附近</span>
+        </div>
+        <div class="nav-item profile" onclick="handleNavClick('我的.html')">
+            <i class="fas fa-user-circle"></i>
+            <span>我的</span>
+        </div>
+    </div>
+
+    <script>
+        // 导航点击处理
+        function handleNavClick(url) {
+            // 添加点击特效
+            const navItem = event.currentTarget;
+            navItem.style.transform = 'scale(0.95)';
+            
+            // 创建涟漪特效
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,153,102,0.2);
+                border-radius: 20px;
+                animation: ripple 0.6s linear;
+                top: 0;
+                left: 0;
+            `;
+            navItem.appendChild(ripple);
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        // 动态点赞功能
+        document.querySelectorAll('.post-actions button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const countSpan = this.querySelector('span');
+                if (!countSpan) {
+                    const text = this.innerText.split(' ');
+                    const newCount = parseInt(text[1]) + 1;
+                    this.innerHTML = `${text[0]} <span>${newCount}</span>`;
+                    
+                    // 添加点赞动画
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            });
+        });
+
+        // 搜索功能
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const keyword = document.querySelector('.search-input').value;
+            // 这里可以添加搜索逻辑
+            console.log('搜索关键词:', keyword);
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
