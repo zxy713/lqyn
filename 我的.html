@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFF9E6;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 用户信息区域 */
+        .user-info {
+            background-color: #FF9966;
+            padding: 30px 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin-right: 20px;
+        }
+
+        .user-text h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-text p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 功能列表 */
+        .menu-list {
+            background-color: white;
+            margin-top: 20px;
+            border-radius: 15px;
+            padding: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .menu-item {
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item i {
+            width: 30px;
+            color: #FF9966;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .menu-text {
+            flex: 1;
+        }
+
+        .menu-arrow {
+            color: #999;
+        }
+
+        /* 退出按钮 */
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #FF9966;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #F4511E;
+        }
+            /* 新增返回按钮样式 */
+    .back-button {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #FF9966;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 100;
+        text-decoration: none;
+        transition: transform 0.2s;
+    }
+
+    .back-button:hover {
+        transform: scale(1.1);
+    }
+
+    .back-button i {
+        color: #333;
+        font-size: 20px;
+    }
+    </style>
+</head>
+<body>
+     <!-- 新增返回按钮 -->
+     <a href="主界面.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <div class="container">
+        <!-- 原有内容保持不变 -->
+        ...
+    </div>
+    <div class="container">
+        <!-- 用户信息 -->
+        <div class="user-info">
+            <img src="未登录.jpg" class="avatar" alt="头像">
+            <div class="user-text">
+                <h2>用户昵称</h2>
+                <p>账号：user</p>
+            </div>
+        </div>
+
+        <!-- 功能菜单 -->
+        <div class="menu-list">
+            <a href="#" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="menu-text">我的订单</span>
+                <i class="fas fa-chevron-right menu-arrow"></i>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-heart"></i>
+                <span class="menu-text">我的收藏</span>
+                <i class="fas fa-chevron-right menu-arrow"></i>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-wallet"></i>
+                <span class="menu-text">我的钱包</span>
+                <i class="fas fa-chevron-right menu-arrow"></i>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-comment-alt"></i>
+                <span class="menu-text">消息中心</span>
+                <i class="fas fa-chevron-right menu-arrow"></i>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span class="menu-text">设置</span>
+                <i class="fas fa-chevron-right menu-arrow"></i>
+            </a>
+        </div>
+
+        <button class="logout-btn">退出登录</button>
+    </div>
+</body>
+</html>
