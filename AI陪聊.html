@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能助手</title>
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 自定义样式 */
+        :root {
+            --primary-color: #5e72e4;
+            --secondary-color: #667eea;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-image: var(--bg-gradient);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
+            border-radius: 25px;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin: 60px auto 20px;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .chat-header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4cd964;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .chat-box {
+            height: 60vh;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            background-color: #f8f9ff;
+            border-top: 1px solid #e9ecef;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        #user-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 10px rgba(94, 114, 228, 0.2);
+        }
+
+        #send-btn {
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #send-btn:hover {
+            background-color: #4a5cd4;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .message {
+            max-width: 80%;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 12px 18px;
+            border-radius: 20px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message.user p {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 4px 20px;
+        }
+
+        .message.bot p {
+            background-color: #f1f3ff;
+            color: #2d3748;
+            border-radius: 20px 20px 20px 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chat-container {
+                margin: 50px 10px 10px;
+            }
+            
+            .back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 8px 12px;
+            }
+        }
+        /*  */
+          /* 新增语音消息样式 */
+          .message.voice p {
+            background-color: #e6f3ff;
+            position: relative;
+            padding-right: 70px;
+        }
+
+        .voice-duration {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .voice-indicator {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        /* 录音状态样式 */
+        #send-btn.recording {
+            background-color: #e74c3c;
+            transform: scale(1.1);
+            animation: pulse 1s infinite;
+        }
+
+        #user-input::placeholder {
+            transition: opacity 0.3s;
+        }
+
+        .voice-mode #user-input::placeholder {
+            opacity: 0;
+        }
+
+        .voice-mode #user-input {
+            background-image: linear-gradient(to right, #5e72e4 50%, transparent 50%);
+            background-size: 200% 100%;
+            background-position: right bottom;
+            transition: all 0.3s;
+        }
+
+        .voice-mode #user-input:focus {
+            background-position: left bottom;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+    
+</head>
+<body>
+    <a href="主界面.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        返回主页
+    </a>
+    
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>老伙伴</h2>
+            <div class="status-indicator">
+                <span class="dot"></span>
+                在线中
+            </div>
+        </div>
+        
+        <div id="chat-box" class="chat-box"></div>
+        
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="输入消息..." />
+            <button id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 初始化事件监听
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            document.getElementById('user-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // 输入框动态效果
+            const inputField = document.getElementById('user-input');
+            inputField.addEventListener('focus', () => {
+                inputField.parentElement.style.boxShadow = '0 0 15px rgba(94, 114, 228, 0.2)';
+            });
+            inputField.addEventListener('blur', () => {
+                inputField.parentElement.style.boxShadow = 'none';
+            });
+        });
+
+        // 消息处理功能
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            if (!userInput) return;
+
+            displayMessage(userInput, 'user');
+            document.getElementById('user-input').value = '';
+
+            setTimeout(() => {
+                const botResponse = getAIResponse(userInput);
+                displayMessage(botResponse, 'bot');
+            }, 500);
+        }
+
+        // 消息显示功能
+        function displayMessage(message, sender) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.innerHTML = `<p>${message}</p>`;
+            chatBox.appendChild(messageElement);
+            
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // AI回复逻辑
+        function getAIResponse(userInput) {
+            const responses = {
+                greetings: ["你好！", "嗨～", "很高兴见到你！"],
+                weather: ["今天晴转多云，25-30℃", "空气质量优，适合外出哦"],
+                farewell: ["再见！", "期待下次聊天！", "保持联系～"],
+                default: ["能换个方式说说吗？", "这个我还在学习中...", "可以再说详细些吗？"]
+            };
+
+            const lowerInput = userInput.toLowerCase();
+            
+            if (/你好|嗨|hello|hi/.test(lowerInput)) {
+                return responses.greetings[Math.floor(Math.random() * responses.greetings.length)];
+            }
+            if (/天气|weather/.test(lowerInput)) {
+                return responses.weather[Math.floor(Math.random() * responses.weather.length)];
+            }
+            if (/再见|bye|拜拜/.test(lowerInput)) {
+                return responses.farewell[Math.floor(Math.random() * responses.farewell.length)];
+            }
+            return responses.default[Math.floor(Math.random() * responses.default.length)];
+        }
+        //  
+        let isVoiceMode = false;
+        let recordingStartTime;
+        let recordingTimer;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendBtn = document.getElementById('send-btn');
+            const inputField = document.getElementById('user-input');
+
+            // 长按切换语音模式
+            sendBtn.addEventListener('mousedown', function(e) {
+                if(isVoiceMode) {
+                    startRecording();
+                    return;
+                }
+                
+                // 长按1秒切换模式
+                recordingTimer = setTimeout(() => {
+                    toggleVoiceMode(true);
+                }, 1000);
+            });
+
+            sendBtn.addEventListener('mouseup', function(e) {
+                clearTimeout(recordingTimer);
+                
+                if(isVoiceMode) {
+                    stopRecording();
+                    return;
+                }
+                
+                // 短按发送文字
+                if(!isVoiceMode) sendMessage();
+            });
+
+            // 输入框点击切换回文字模式
+            inputField.addEventListener('click', () => {
+                if(isVoiceMode) toggleVoiceMode(false);
+            });
+        });
+
+        function toggleVoiceMode(enable) {
+            isVoiceMode = enable;
+            const inputField = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+
+            if(enable) {
+                inputField.placeholder = "松开结束录音";
+                sendBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                sendBtn.style.backgroundColor = '#e74c3c';
+            } else {
+                inputField.placeholder = "输入消息...";
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                sendBtn.style.backgroundColor = '#5e72e4';
+            }
+        }
+
+        function startRecording() {
+            const sendBtn = document.getElementById('send-btn');
+            recordingStartTime = Date.now();
+            sendBtn.classList.add('recording');
+            sendBtn.innerHTML = '<i class="fas fa-stop"></i>';
+        }
+
+        function stopRecording() {
+            const sendBtn = document.getElementById('send-btn');
+            const duration = Math.round((Date.now() - recordingStartTime)/1000);
+            sendBtn.classList.remove('recording');
+            
+            // 显示语音消息
+            displayVoiceMessage(duration);
+            simulateBotResponse();
+            
+            // 1秒后恢复按钮状态
+            setTimeout(() => {
+                sendBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                sendBtn.style.backgroundColor = '#e74c3c';
+            }, 1000);
+        }
+
+        function displayVoiceMessage(duration) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user', 'voice');
+            messageElement.innerHTML = `
+                <p>
+                    <i class="fas fa-microphone voice-indicator"></i>
+                ）))
+                    <span class="voice-duration">${duration}s</span>
+                </p>
+            `;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+        }
+
+        // 保持其他原有函数不变
+        function simulateBotResponse() {
+            setTimeout(() => {
+                const responses = [
+                    "你好，我是您身边的语音助手小郭，很高兴为您服务",
+                    "好的正在为您进行查找，请耐心等待",
+                    "祝您生活愉快，晚年幸福，尽享轻喜时光！"
+                ];
+                displayMessage(responses[Math.floor(Math.random() * responses.length)], 'bot');
+            }, 1500);
+        }
+
+        // 修改后的sendMessage保持不变
+    </script>
+</body>
+</html>
