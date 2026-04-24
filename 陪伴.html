@@ -2,249 +2,618 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>陪伴</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Font Awesome（和你底部导航一致） -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <title>陪伴</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei";
-            background: linear-gradient(135deg, #FFE0B2, #FFB74D);
+            background: linear-gradient(135deg, #FFE0B2 0%, #FFB74D 100%);
             min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            padding: 20px;
             color: #5D4037;
         }
-
-        /* 顶部标题 */
-        .header {
-            text-align: center;
-            padding: 20px 15px 10px;
+        
+        /* 用户列表页面样式 - 默认隐藏 */
+        .users-page {
+            display: none;
+            padding: 20px;
         }
-
-        .header h1 {
-            font-size: 26px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-top: 6px;
-        }
-
-        /* 搜索栏 */
-        .search-box {
-            padding: 10px 15px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 2px solid #FF9800;
-            font-size: 15px;
-            outline: none;
-            background: rgba(255,255,255,0.9);
-        }
-
-        /* 用户列表 */
-        .user-list {
-            padding: 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            padding-bottom: 80px; /* 给底部导航留空间 */
-        }
-
-        /* 用户卡片 */
-        .user-card {
-            background: #FFF3E0;
-            border-radius: 16px;
-            padding: 15px;
+        
+        .page-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 6px 15px rgba(255,152,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #FFCC80;
+            border: 2px solid #FF9800;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #5D4037;
+            margin-right: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #FFB74D;
+            transform: translateX(-5px);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5D4037;
+        }
+        
+        /* 搜索栏样式 */
+        .search-container {
+            margin-bottom: 25px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #FF9800;
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #5D4037;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #FF5722;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: #FF9800;
+        }
+        
+        .users-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        /* 用户卡片样式 */
+        .user-card {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.2);
+            transition: all 0.3s ease;
             border: 2px solid #FFCC80;
         }
-
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(255, 152, 0, 0.3);
+            background: white;
+        }
+        
+        .user-info-top {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+        
         .avatar {
-            width: 65px;
-            height: 65px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #FF9800;
+            border: 4px solid #FF9800;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
+        
+        .status-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid white;
+            bottom: 5px;
+            right: 5px;
+        }
+        
+        .online {
+            background-color: #FF9800;
+        }
+        
+        .offline {
+            background-color: #BDBDBD;
+        }
+        
         .user-info {
             flex: 1;
         }
-
+        
         .nickname {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 600;
+            margin-bottom: 8px;
+            color: #5D4037;
         }
-
-        .tags {
-            margin-top: 6px;
+        
+        .interests {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
+            margin-top: 10px;
         }
-
-        .tag {
+        
+        .interest-tag {
+            padding: 8px 16px;
             background: #FF9800;
             color: white;
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #FF9800;
         }
-
+        
         .status {
-            font-size: 12px;
-            margin-top: 6px;
+            font-size: 13px;
             color: #8D6E63;
+            margin-top: 5px;
+            font-weight: 500;
         }
-
-        .online {
-            color: #FF9800;
+        
+        .user-bio {
+            font-size: 14px;
+            color: #8D6E63;
+            margin-top: 8px;
+            opacity: 0.9;
         }
-
-        /* 聊天按钮 */
-        .chat-btn {
+        
+        /* 聊天按钮样式 */
+        .chat-button {
+            width: 100%;
+            padding: 12px 20px;
             background: linear-gradient(135deg, #FF9800, #FF5722);
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
         }
-
-        .chat-btn:disabled {
+        
+        .chat-button:hover {
+            background: linear-gradient(135deg, #FF5722, #E64A19);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+        }
+        
+        .chat-button:active {
+            transform: translateY(0);
+        }
+        
+        .chat-button:disabled {
             background: #BDBDBD;
             cursor: not-allowed;
+            transform: none;
         }
-
-        /* 底部导航（和你现有保持一致） */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background: #fff;
-            display: flex;
-            border-top: 1px solid #eee;
-        }
-
-        .nav-item {
-            flex: 1;
+        
+        /* 加载动画 */
+        .loading {
+            display: none;
             text-align: center;
-            font-size: 13px;
-            color: #999;
-            padding-top: 8px;
+            color: #5D4037;
+            font-size: 18px;
+            margin: 20px 0;
         }
-
-        .nav-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
+        
+        .loading-dots {
+            display: inline-block;
+            width: 20px;
+            text-align: left;
         }
-
-        .nav-item.companion {
+        
+        .loading-dots::after {
+            content: '...';
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        /* 页脚样式 */
+        .page-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 152, 0, 0.3);
+            color: #8D6E63;
+            font-size: 14px;
+        }
+        
+        /* 在线状态统计 */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #5D4037;
+            border: 1px solid #FFCC80;
+        }
+        
+        .online-count {
+            font-weight: 600;
             color: #FF9800;
+        }
+        
+        .total-count {
+            font-weight: 600;
+            color: #FF9800;
+        }
+        
+        /* 无搜索结果提示 */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8D6E63;
+            font-size: 16px;
+            display: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .users-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-card {
+                padding: 20px;
+            }
+            
+            .avatar-container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .back-button {
+                margin-right: 0;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- 顶部 -->
-    <div class="header">
-        <p>找到愿意倾听和分享的伙伴</p>
-    </div>
-
-    <!-- 搜索 -->
-    <div class="search-box">
-        <input type="text" placeholder="🔍 搜索昵称或兴趣">
-    </div>
-
-    <!-- 用户列表 -->
-    <div class="user-list" id="userList">
-        <!-- JS 动态渲染 -->
-    </div>
-
-    <!-- 底部导航（和主界面一致） -->
-    <div class="bottom-nav">
-        <div class="nav-item recharge" onclick="handleNavClick('会员充值2.html')">
-            <i class="fas fa-coins"></i>
-            <span>充值</span>
+    <!-- 主页：软件按钮 -->
+    <div id="homePage" class="home-container">
+        <div style="text-align: center;">
+            <div class="companion-button" id="companionBtn">
+                <div class="button-icon">🤗</div>
+                <div class="button-text">陪伴</div>
+            </div>
+            <p class="subtitle">点击按钮寻找温暖的陪伴伙伴</p>
         </div>
-        <div class="nav-item nearby" onclick="handleNavClick('地图2.html')">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>附近</span>
+    </div>
+    
+    <!-- 用户列表页面 -->
+    <div id="usersPage" class="users-page">
+        <div class="page-header">
+            <button class="back-button" id="backBtn">
+                <span>←</span> 返回
+            </button>
+            <h1 class="page-title">温暖的陪伴伙伴们</h1>
         </div>
-        <div class="nav-item profile" onclick="handleNavClick('我的.html')">
-            <i class="fas fa-user-circle"></i>
-            <span>我的</span>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" 
+                   placeholder="🔍 搜索昵称、兴趣或状态...">
         </div>
-        <div class="nav-item companion">
-            <i class="fas fa-heart"></i>
-            <span>陪伴</span>
+        
+        <div class="stats-bar" id="statsBar">
+            <span>共 <span id="totalCount" class="total-count">0</span> 位伙伴</span>
+            <span><span id="onlineCount" class="online-count">0</span> 位在线</span>
+        </div>
+        
+        <div class="loading" id="loading">加载中<span class="loading-dots"></span></div>
+        
+        <div class="no-results" id="noResults">
+            🍂 没有找到匹配的伙伴<br>
+            <span style="font-size: 14px; opacity: 0.8;">试试其他搜索关键词</span>
+        </div>
+        
+        <div class="users-container" id="usersContainer">
+            <!-- 用户卡片会通过JS动态添加 -->
+        </div>
+        
+        <div class="page-footer">
+            🍁 找到你的温暖陪伴，一起分享生活中的美好瞬间 ❤️
         </div>
     </div>
 
     <script>
+        // 用户数据 - 总共6个用户
         const users = [
-            { id: 1, name: "小太阳", tags: ["绘画","阅读"], online: true },
-            { id: 2, name: "星月童话", tags: ["写作","音乐"], online: true },
-            { id: 3, name: "小浣熊君", tags: ["游戏","科技"], online: false },
-            { id: 4, name: "彩虹糖", tags: ["烘焙","手作"], online: true },
-            { id: 5, name: "森林小鹿", tags: ["徒步","露营"], online: false },
-            { id: 6, name: "音乐精灵", tags: ["吉他","唱歌"], online: true }
+            {
+                id: 1,
+                name: "小太阳",
+                avatar: "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=200&h=200&fit=crop&crop=face",
+                interests: ["绘画", "阅读", "咖啡", "旅行"],
+                status: "online",
+                statusText: "正在寻找陪伴",
+                bio: "用画笔记录美好时光的温暖伙伴"
+            },
+            {
+                id: 2,
+                name: "星月童话",
+                avatar: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=200&h=200&fit=crop&crop=face",
+                interests: ["写作", "摄影", "星空", "音乐"],
+                status: "online",
+                statusText: "刚刚在线",
+                bio: "梦想成为童话作家的温柔女孩"
+            },
+            {
+                id: 3,
+                name: "小浣熊君",
+                avatar: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=200&h=200&fit=crop&crop=face",
+                interests: ["游戏", "科技", "动漫", "篮球"],
+                status: "offline",
+                statusText: "1小时前在线",
+                bio: "爱打游戏的技术宅，充满好奇心"
+            },
+            {
+                id: 4,
+                name: "彩虹糖",
+                avatar: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=200&fit=crop&crop=face",
+                interests: ["手作", "烘焙", "甜品", "园艺"],
+                status: "online",
+                statusText: "在线 - 心情愉悦",
+                bio: "甜甜的糖果女孩，喜欢一切可爱的事物"
+            },
+            {
+                id: 5,
+                name: "森林小鹿",
+                avatar: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=200&h=200&fit=crop&crop=face",
+                interests: ["徒步", "露营", "摄影", "骑行"],
+                status: "offline",
+                statusText: "3小时前在线",
+                bio: "热爱大自然的户外探险家"
+            },
+            {
+                id: 6,
+                name: "音乐精灵",
+                avatar: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=200&h=200&fit=crop&crop=face",
+                interests: ["吉他", "唱歌", "爵士", "钢琴"],
+                status: "online",
+                statusText: "在线 - 正在听歌",
+                bio: "音乐是我与世界的对话方式"
+            }
         ];
 
-        const userList = document.getElementById('userList');
+        // DOM元素
+        const homePage = document.getElementById('homePage');
+        const usersPage = document.getElementById('usersPage');
+        const companionBtn = document.getElementById('companionBtn');
+        const backBtn = document.getElementById('backBtn');
+        const usersContainer = document.getElementById('usersContainer');
+        const loading = document.getElementById('loading');
+        const statsBar = document.getElementById('statsBar');
+        const totalCount = document.getElementById('totalCount');
+        const onlineCount = document.getElementById('onlineCount');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
 
-        function renderUsers() {
-            userList.innerHTML = users.map(u => `
-                <div class="user-card">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${u.id}" class="avatar">
-                    <div class="user-info">
-                        <div class="nickname">${u.name}</div>
-                        <div class="tags">
-                            ${u.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                        </div>
-                        <div class="status ${u.online ? 'online' : ''}">
-                            ${u.online ? '🟡 在线' : '⚫ 离线'}
-                        </div>
-                    </div>
-                    <button class="chat-btn" ${!u.online ? 'disabled' : ''}>
-                        ${u.online ? '聊天' : '离线'}
-                    </button>
-                </div>
-            `).join('');
+        // 当前显示的用户列表
+        let filteredUsers = [...users];
+
+        // 更新统计信息
+        function updateStats(usersList = users) {
+            const onlineUsers = usersList.filter(user => user.status === 'online');
+            totalCount.textContent = usersList.length;
+            onlineCount.textContent = onlineUsers.length;
         }
 
-        renderUsers();
-
-        // 聊天点击
-        userList.addEventListener('click', e => {
-            if (e.target.classList.contains('chat-btn')) {
-                const card = e.target.closest('.user-card');
-                const name = card.querySelector('.nickname').innerText;
-                alert(`💬 开始与 ${name} 聊天`);
+        // 搜索功能
+        function filterUsers(searchTerm) {
+            searchTerm = searchTerm.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filteredUsers = [...users];
+            } else {
+                filteredUsers = users.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.bio.toLowerCase().includes(searchTerm) ||
+                    user.interests.some(interest => 
+                        interest.toLowerCase().includes(searchTerm)
+                    ) ||
+                    user.statusText.toLowerCase().includes(searchTerm)
+                );
             }
+            
+            renderUserCards();
+        }
+
+        // 生成用户卡片
+        function renderUserCards() {
+            usersContainer.innerHTML = '';
+            
+            if (filteredUsers.length === 0) {
+                noResults.style.display = 'block';
+                usersContainer.style.display = 'none';
+                updateStats(filteredUsers);
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            usersContainer.style.display = 'grid';
+            
+            filteredUsers.forEach(user => {
+                const statusClass = user.status === 'online' ? 'online' : 'offline';
+                const statusEmoji = user.status === 'online' ? '🟡' : '⚫';
+                const isOnline = user.status === 'online';
+                
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <div class="user-info-top">
+                        <div class="avatar-container">
+                            <img src="${user.avatar}" alt="${user.name}" class="avatar" 
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\"><rect width=\"100\" height=\"100\" fill=\"%23FF9800\" rx=\"50\"/><text x=\"50\" y=\"55\" text-anchor=\"middle\" font-family=\"Arial\" font-size=\"35\" fill=\"white\">${user.name.charAt(0)}</text></svg>'">
+                            <div class="status-dot ${statusClass}"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="nickname">${user.name} ${statusEmoji}</div>
+                            <div class="user-bio">${user.bio}</div>
+                            <div class="interests">
+                                ${user.interests.map(interest => 
+                                    `<span class="interest-tag">${interest}</span>`
+                                ).join('')}
+                            </div>
+                            <div class="status ${statusClass}">${user.statusText}</div>
+                        </div>
+                    </div>
+                    <button class="chat-button" data-user-id="${user.id}" ${!isOnline ? 'disabled' : ''}>
+                        <span>💬</span>
+                        ${isOnline ? '立即聊天' : '用户离线'}
+                    </button>
+                `;
+                
+                // 添加聊天按钮点击事件
+                const chatButton = userCard.querySelector('.chat-button');
+                if (isOnline) {
+                    chatButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        startChat(user);
+                    });
+                }
+                
+                // 卡片点击事件
+                userCard.addEventListener('click', () => {
+                    showUserInfo(user);
+                });
+                
+                usersContainer.appendChild(userCard);
+            });
+            
+            updateStats(filteredUsers);
+        }
+
+        // 开始聊天功能
+        function startChat(user) {
+            const messages = [
+                `你好！我是${user.name}，很高兴认识你！`,
+                `看到你的资料，我们对 ${user.interests[Math.floor(Math.random() * user.interests.length)]} 都有共同兴趣呢！`,
+                `希望我们能成为好朋友，一起分享生活中的美好～`,
+                `今天天气真好，你那边怎么样？`
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            alert(`💬 开始与 ${user.name} 聊天\n\n${user.name}: ${randomMessage}\n\n✨ 兴趣：${user.interests.join('、')}\n🎯 状态：${user.statusText}`);
+        }
+
+        // 显示用户信息
+        function showUserInfo(user) {
+            alert(`🧡 伙伴信息\n\n👤 昵称：${user.name}\n💬 状态：${user.statusText}\n✨ 介绍：${user.bio}\n🎯 兴趣：${user.interests.join('、')}\n\n${user.status === 'online' ? '💬 可以点击下方按钮开始聊天' : '⏸️ 当前离线，暂时无法聊天'}`);
+        }
+
+        // 页面切换功能
+        companionBtn.addEventListener('click', () => {
+            homePage.style.display = 'none';
+            usersPage.style.display = 'block';
+            document.body.style.background = 'linear-gradient(135deg, #FFE0B2 0%, #FFB74D 100%)';
+            renderUserCards();
+        });
+
+        backBtn.addEventListener('click', () => {
+            usersPage.style.display = 'none';
+            homePage.style.display = 'flex';
+        });
+
+        // 搜索功能
+        searchInput.addEventListener('input', (e) => {
+            filterUsers(e.target.value);
+        });
+
+        // 添加随机状态更新
+        function updateRandomStatus() {
+            setInterval(() => {
+                const randomUser = users[Math.floor(Math.random() * users.length)];
+                const wasOnline = randomUser.status === 'online';
+                
+                // 25%的概率切换状态
+                if (Math.random() < 0.25) {
+                    randomUser.status = wasOnline ? 'offline' : 'online';
+                    
+                    if (randomUser.status === 'online') {
+                        const activities = ['在线 - 心情愉悦', '刚刚上线', '有空聊天', '在线 - 寻找陪伴'];
+                        randomUser.statusText = activities[Math.floor(Math.random() * activities.length)];
+                    } else {
+                        const times = ['5分钟前在线', '1小时前在线', '2小时前在线', '暂时离开'];
+                        randomUser.statusText = times[Math.floor(Math.random() * times.length)];
+                    }
+                    
+                    // 如果当前在用户页面，重新渲染
+                    if (usersPage.style.display === 'block') {
+                        renderUserCards();
+                    }
+                }
+            }, 8000); // 每8秒更新一次
+        }
+
+        // 初始渲染和启动状态更新
+        renderUserCards();
+        updateRandomStatus();
+        
+        // 添加页面加载动画
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
         });
     </script>
-
 </body>
 </html>
