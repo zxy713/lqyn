@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>暖心陪伴 - 志愿者老人结对平台</title>
+    <title>暖心陪伴</title>
     <style>
         * {
             margin: 0;
@@ -38,8 +38,9 @@
             margin-right: 6px;
         }
 
+        /* 大标题修改 */
         h1 {
-            font-size: 24px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 20px;
             text-align: center;
@@ -93,19 +94,12 @@
             margin-bottom: 15px;
         }
 
-        /* 普通分类标题 */
+        /* 所有分类统一大号标题，和医疗保持一致 */
         .category-title {
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* 医疗健康 单独放大图标+文字 */
-        .medical-title {
             font-size: 28px !important;
             font-weight: 700 !important;
+            display: flex;
+            align-items: center;
             gap: 12px !important;
         }
 
@@ -196,6 +190,7 @@
             font-size: 9px;
         }
 
+        /* 按钮文字改为：聊天 */
         .chat-btn {
             background: linear-gradient(90deg, #ff9800, #ff5722);
             color: white;
@@ -211,17 +206,18 @@
 <body>
     <button class="back-btn">返回</button>
 
-    <h1>暖心结对 · 志愿者陪伴平台</h1>
+    <!-- 标题已修改 -->
+    <h1>点击按钮寻找温暖的陪伴</h1>
 
     <div class="search-bar">
         <input type="text" placeholder="搜索志愿者、陪伴需求...">
     </div>
 
-    <!-- 医疗健康需求【超大标题+图标】 -->
+    <!-- 医疗健康需求 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title medical-title">🏥 医疗健康需求陪伴</div>
-            <div class="online-count" id="count-medical">在线 12 人</div>
+            <div class="category-title">🏥 医疗健康需求</div>
+            <div class="online-count" id="count-medical">在线 32 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -238,7 +234,7 @@
                         <span class="tag">健康监测</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
             <div class="member-item">
                 <div class="avatar-wrap">
@@ -254,7 +250,7 @@
                         <span class="tag">情绪安抚</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
@@ -262,8 +258,8 @@
     <!-- 生活照料服务 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title">🏠 生活日常照料陪伴</div>
-            <div class="online-count" id="count-life">在线 8 人</div>
+            <div class="category-title">🏠 生活日常照料</div>
+            <div class="online-count" id="count-life">在线 25 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -280,7 +276,7 @@
                         <span class="tag">简易做饭</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
@@ -288,8 +284,8 @@
     <!-- 日间陪护陪伴 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title">☀️ 日间陪护聊天陪伴</div>
-            <div class="online-count" id="count-day">在线 6 人</div>
+            <div class="category-title">☀️ 日间陪护聊天</div>
+            <div class="online-count" id="count-day">在线 23 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -306,7 +302,7 @@
                         <span class="tag">日间看护</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
@@ -314,8 +310,8 @@
     <!-- 娱乐兴趣陪伴 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title">🎨 娱乐兴趣爱好陪伴</div>
-            <div class="online-count" id="count-fun">在线 15 人</div>
+            <div class="category-title">🎨 娱乐兴趣爱好</div>
+            <div class="online-count" id="count-fun">在线 28 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -332,7 +328,7 @@
                         <span class="tag">手工书画</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
@@ -340,8 +336,8 @@
     <!-- 数字智能辅导 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title">📱 智能手机教学陪伴</div>
-            <div class="online-count" id="count-tech">在线 5 人</div>
+            <div class="category-title">📱 智能手机教学</div>
+            <div class="online-count" id="count-tech">在线 21 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -357,7 +353,7 @@
                         <span class="tag">线上办事</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
@@ -365,8 +361,8 @@
     <!-- 情感心灵陪伴 -->
     <div class="category-card">
         <div class="category-header">
-            <div class="category-title">💛 情感心灵倾听陪伴</div>
-            <div class="online-count" id="count-heart">在线 9 人</div>
+            <div class="category-title">💛 情感心灵倾听</div>
+            <div class="online-count" id="count-heart">在线 26 人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -382,7 +378,7 @@
                         <span class="tag">孤独陪伴</span>
                     </div>
                 </div>
-                <button class="chat-btn">聊聊</button>
+                <button class="chat-btn">聊天</button>
             </div>
         </div>
     </div>
