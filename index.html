@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>乐庆余年 - 社交版</title>
+    <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -20,6 +21,7 @@
             position: relative;
         }
 
+        /* 背景图样式 */
         body::before {
             content: '';
             position: fixed;
@@ -28,11 +30,12 @@
             width: 100%;
             height: 100%;
             background: url('背景图.jpg') center/cover no-repeat;
-            opacity: 0.15;
-            z-index: -1;
-            pointer-events: none;
+            opacity: 0.15; /* 控制透明度 */
+            z-index: -1; /* 确保在内容层下方 */
+            pointer-events: none; /* 防止干扰交互 */
         }
 
+        /* 顶部导航栏 */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -42,13 +45,15 @@
         .ai-chat-btn {
             width: 60px;
             height: 60px;
-            background-color: #fff;
+            background-color: #ff9966;
             border-radius: 50%;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
-            font-size: 18px;
             color: white;
+            font-size: 18px;
             font-weight: bold;
+            border: none;
+            cursor: pointer;
         }
 
         .ai-chat-btn:active {
@@ -67,6 +72,7 @@
             border-radius: 25px;
             border: 2px solid #ff9966;
             font-size: 1.2rem;
+            transition: box-shadow 0.3s ease;
         }
 
         .search-input:focus {
@@ -84,17 +90,26 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
 
+        .search-btn:hover {
+            background: #ff9966;
+            color: white;
+        }
+
+        /* 动态消息区 */
         .feed-container {
-            height: 68vh; /* 稍微缩小，让内容更适配 */
+            height: 68vh; /* 优化高度，避免遮挡 */
             overflow-y: auto;
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.85); /* 半透明白色背景 */
+            backdrop-filter: blur(5px); /* 毛玻璃效果 */
             border-radius: 20px;
             padding: 15px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
         }
 
         .post-item {
@@ -102,6 +117,7 @@
             border-bottom: 1px solid #eee;
             display: flex;
             align-items: start;
+            transition: all 0.3s ease;
         }
 
         .user-avatar {
@@ -110,7 +126,7 @@
             border-radius: 50%;
             margin-right: 15px;
             object-fit: cover;
-            flex-shrink: 0;
+            flex-shrink: 0; /* 防止头像被压缩 */
         }
 
         .post-actions button {
@@ -119,51 +135,16 @@
             border: 1px solid #eee;
             border-radius: 20px;
             background: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        /* -------------- 关键修改：樱花图片变小 -------------- */
-        .image-frame {
-            position: relative;
-            margin: 10px 0;
-            padding: 6px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 280px; /* 限制图片宽度 */
+        .post-actions button:hover {
+            background: #ff9966;
+            color: white;
         }
 
-        .sakura-image {
-            width: 100%;
-            height: 160px; /* 固定图片高度 */
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        /* --------------------------------------------------- */
-
-        .article-post {
-            animation: slideIn 1s ease-out;
-            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
-            border-left: 4px solid #ff69b4;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .article-title {
-            color: #e94f7c;
-            font-size: 1.3em;
-        }
-
-        .highlight {
-            background: #fff0f6;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px dashed #ff85c0;
-            font-size: 14px;
-        }
-
+        /* 底部导航 */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -178,51 +159,149 @@
             width: 80px;
             height: 80px;
             border-radius: 20px;
-            background: #fff;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-item i {
-            font-size: 30px;
+            font-size: 32px;
+            margin-bottom: 5px;
             color: #ff9966;
+            transition: transform 0.3s ease;
         }
 
         .nav-item span {
             font-size: 14px;
             color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 153, 102, 0.3);
+        }
+
+        .nav-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+
+        /* 动画特效 */
+        @keyframes ripple {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes coin-bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .recharge:hover i {
+            animation: coin-bounce 0.6s ease;
+        }
+
+        /* 来看樱花文章样式 */
+        .article-post {
+            animation: slideIn 1s ease-out;
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+            border-left: 4px solid #ff69b4;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .article-title {
+            color: #e94f7c;
+            font-size: 1.4em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* 关键修改：樱花图片缩小+合理排版 */
+        .image-frame {
+            position: relative;
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 280px; /* 限制图片最大宽度 */
+        }
+
+        .sakura-image {
+            width: 100%;
+            height: 160px; /* 固定图片高度，避免过大 */
+            object-fit: cover; /* 保持图片比例，不拉伸 */
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .sakura-image:hover {
+            transform: scale(1.02);
+        }
+
+        .highlight {
+            background: #fff0f6;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #ff85c0;
+        }
+
+        .loading {
+            background: #f8f8f8;
+            min-height: 200px;
         }
     </style>
 </head>
 <body>
-
+    <!-- 顶部导航 -->
     <div class="top-bar">
-        <button class="ai-chat-btn" style="background-color: #ff9966;" onclick="window.location.href='AI陪聊.html'">AI</button>
+        <button class="ai-chat-btn" onclick="window.location.href='AI陪聊.html'">AI</button>
+        
         <div class="search-box">
             <input type="text" class="search-input" placeholder="搜索动态或好友...">
-            <button class="search-btn"><i class="fas fa-search"></i></button>
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
     </div>
 
     <div class="feed-container" id="feed">
-        <!-- 樱花文章 -->
+        <!-- 新增的樱花文章 -->
         <div class="post-item article-post">
             <img src="shanghua.jpg" class="user-avatar">
             <div class="article-container">
                 <h3>春意盎然</h3>
                 <div class="article-content">
                     <h2 class="article-title">🌸 来看樱花 | 家门口的浪漫盛宴</h2>
-                    <p>春风十里，不如樱花满枝头！砚山的染井吉野樱已进入盛放期，粉白花瓣如云似霞...</p>
-                    
+                    <p class="animate-text">春风十里，不如樱花满枝头！砚山的染井吉野樱已进入盛放期，粉白花瓣如云似霞...</p>
                     <div class="image-frame">
+                        <!-- 缩小后的樱花图片 -->
                         <img src="sakura.webp" class="sakura-image" alt="樱花盛放">
                     </div>
-                    
-                    <p class="highlight">📍 位置：金海路138号<br>🎉 本周六将举办「樱花摄影课堂」</p>
+                    <p class="highlight">📍 位置：金海路138号<br>
+                    🎉 本周六将举办「樱花摄影课堂」</p>
                 </div>
                 <div class="post-actions">
                     <button>👍 52</button>
@@ -230,8 +309,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- 下面的动态全部可见 -->
+    
+        <!-- 原有其他动态消息（全部可见，不被遮挡） -->
         <div class="post-item">
             <img src="user1.jpg" class="user-avatar">
             <div>
@@ -305,6 +384,7 @@
         </div>
     </div>
 
+    <!-- 底部导航 -->
     <div class="bottom-nav">
         <div class="nav-item recharge" onclick="handleNavClick('会员充值2.html')">
             <i class="fas fa-coins"></i>
@@ -318,6 +398,7 @@
             <i class="fas fa-user-circle"></i>
             <span>我的</span>
         </div>
+        <!-- 陪伴按钮 -->
         <div class="nav-item companion" onclick="handleNavClick('陪伴.html')">
             <i class="fas fa-heart"></i>
             <span>陪伴</span>
@@ -325,20 +406,55 @@
     </div>
 
     <script>
+        // 导航点击处理
         function handleNavClick(url) {
+            // 添加点击特效
             const navItem = event.currentTarget;
             navItem.style.transform = 'scale(0.95)';
+            
+            // 创建涟漪特效
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,153,102,0.2);
+                border-radius: 20px;
+                animation: ripple 0.6s linear;
+                top: 0;
+                left: 0;
+            `;
+            navItem.appendChild(ripple);
+            
             setTimeout(() => {
                 window.location.href = url;
             }, 300);
         }
 
+        // 动态点赞功能
         document.querySelectorAll('.post-actions button').forEach(btn => {
             btn.addEventListener('click', function() {
                 const text = this.innerText.split(' ');
                 const newCount = parseInt(text[1]) + 1;
                 this.innerHTML = `${text[0]} ${newCount}`;
+                
+                // 添加点赞动画
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
             });
+        });
+
+        // 搜索功能
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const keyword = document.querySelector('.search-input').value;
+            // 这里可以添加搜索逻辑
+            console.log('搜索关键词:', keyword);
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
         });
     </script>
 </body>
