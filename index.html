@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>乐庆余年 - 社交版</title>
-    <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -21,7 +20,6 @@
             position: relative;
         }
 
-        /* 背景图样式 */
         body::before {
             content: '';
             position: fixed;
@@ -30,255 +28,160 @@
             width: 100%;
             height: 100%;
             background: url('背景图.jpg') center/cover no-repeat;
-            opacity: 0.15; /* 控制透明度 */
-            z-index: -1; /* 确保在内容层下方 */
-            pointer-events: none; /* 防止干扰交互 */
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* 顶部导航栏 */
         .top-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .ai-chat-btn {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background-color: #ff9966;
-            border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
             border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-weight: bold;
             cursor: pointer;
         }
 
-        .ai-chat-btn:active {
-            transform: scale(0.95);
-        }
-
         .search-box {
-            flex:0.9;
+            flex: 0.9;
             display: flex;
             align-items: center;
         }
 
         .search-input {
-            width: 100%;
-            padding: 15px;
+            padding: 12px;
             border-radius: 25px;
             border: 2px solid #ff9966;
-            font-size: 1.2rem;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(255,153,102,0.3);
+            font-size: 1rem;
         }
 
         .search-btn {
-            width: 60px;
-            height: 60px;
-            margin-left: 10px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            margin-left: 8px;
             border: none;
+            border-radius: 50%;
+            background: #fff;
             cursor: pointer;
         }
 
-        .search-btn:hover {
-            background: #ff9966;
-            color: white;
-        }
-
-        /* 动态消息区 */
+        /* 关键：缩短滚动容器高度，保证下面内容全出来 */
         .feed-container {
-            height: 68vh; /* 优化高度，避免遮挡 */
+            height: 55vh;
             overflow-y: auto;
-            background: rgba(255,255,255,0.85); /* 半透明白色背景 */
-            backdrop-filter: blur(5px); /* 毛玻璃效果 */
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(5px);
             border-radius: 20px;
-            padding: 15px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 12px;
+            margin: 10px 0;
         }
 
         .post-item {
-            padding: 15px;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
             display: flex;
             align-items: start;
-            transition: all 0.3s ease;
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            margin-right: 15px;
+            margin-right: 12px;
             object-fit: cover;
-            flex-shrink: 0; /* 防止头像被压缩 */
+            flex-shrink: 0;
         }
 
-        .post-actions button {
-            margin-right: 15px;
-            padding: 6px 12px;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            background: #fff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .post-actions button:hover {
-            background: #ff9966;
-            color: white;
-        }
-
-        /* 底部导航 */
-        .bottom-nav {
-            position: fixed;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-around;
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-item i {
-            font-size: 32px;
-            margin-bottom: 5px;
-            color: #ff9966;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item span {
-            font-size: 14px;
-            color: #666;
-            transition: color 0.3s ease;
-        }
-
-        .nav-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(255, 153, 102, 0.3);
-        }
-
-        .nav-item:hover i {
-            transform: scale(1.1);
-        }
-
-        .nav-item:active {
-            transform: scale(0.95);
-        }
-
-        /* 动画特效 */
-        @keyframes ripple {
-            from {
-                transform: scale(0);
-                opacity: 1;
-            }
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        @keyframes coin-bounce {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-
-        .recharge:hover i {
-            animation: coin-bounce 0.6s ease;
-        }
-
-        /* 来看樱花文章样式 */
-        .article-post {
-            animation: slideIn 1s ease-out;
-            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
-            border-left: 4px solid #ff69b4;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .article-title {
-            color: #e94f7c;
-            font-size: 1.4em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        /* 关键修改：樱花图片缩小+合理排版 */
+        /* 樱花图片 再次缩小 */
         .image-frame {
-            position: relative;
-            margin: 10px 0;
-            padding: 8px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 280px; /* 限制图片最大宽度 */
+            max-width: 180px;
+            margin: 8px 0;
+            padding: 5px;
+            border-radius: 10px;
         }
 
         .sakura-image {
             width: 100%;
-            height: 160px; /* 固定图片高度，避免过大 */
-            object-fit: cover; /* 保持图片比例，不拉伸 */
-            border-radius: 8px;
-            transition: transform 0.3s ease;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 6px;
         }
 
-        .sakura-image:hover {
-            transform: scale(1.02);
-        }
-
+        /* 文字单行强制不换行 */
         .highlight {
             background: #fff0f6;
-            padding: 15px;
+            padding: 8px;
             border-radius: 8px;
             border: 1px dashed #ff85c0;
+            white-space: nowrap;
+            font-size: 13px;
+            overflow: hidden;
         }
 
-        .loading {
-            background: #f8f8f8;
-            min-height: 200px;
+        .article-title {
+            font-size: 1.1em;
+            color: #e94f7c;
+            margin-bottom: 4px;
+        }
+
+        .post-actions button {
+            margin-right: 10px;
+            padding: 4px 10px;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 26px;
+            color: #ff9966;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .article-post {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+            border-left: 3px solid #ff69b4;
         }
     </style>
 </head>
 <body>
-    <!-- 顶部导航 -->
     <div class="top-bar">
         <button class="ai-chat-btn" onclick="window.location.href='AI陪聊.html'">AI</button>
-        
         <div class="search-box">
             <input type="text" class="search-input" placeholder="搜索动态或好友...">
             <button class="search-btn">
@@ -287,30 +190,31 @@
         </div>
     </div>
 
-    <div class="feed-container" id="feed">
-        <!-- 新增的樱花文章 -->
+    <div class="feed-container">
+        <!-- 樱花动态 图片很小+文字一排 -->
         <div class="post-item article-post">
             <img src="shanghua.jpg" class="user-avatar">
             <div class="article-container">
-                <h3>春意盎然</h3>
+                <h3 style="font-size:15px;margin-bottom:4px;">春意盎然</h3>
                 <div class="article-content">
                     <h2 class="article-title">🌸 来看樱花 | 家门口的浪漫盛宴</h2>
-                    <p class="animate-text">春风十里，不如樱花满枝头！砚山的染井吉野樱已进入盛放期，粉白花瓣如云似霞...</p>
+                    <p style="font-size:14px;">春风十里，不如樱花满枝头！粉白花瓣如云似霞...</p>
+
                     <div class="image-frame">
-                        <!-- 缩小后的樱花图片 -->
-                        <img src="sakura.webp" class="sakura-image" alt="樱花盛放">
+                        <img src="sakura.webp" classsakura-image alt="樱花盛放">
                     </div>
-                    <p class="highlight">📍 位置：金海路138号<br>
-                    🎉 本周六将举办「樱花摄影课堂」</p>
+
+                    <!-- 强制一行不换行 -->
+                    <p class="highlight">📍 金海路138号 · 本周六将举办樱花摄影课堂</p>
                 </div>
-                <div class="post-actions">
+                <div class="post-actions" style="margin-top:6px;">
                     <button>👍 52</button>
                     <button>💬 24</button>
                 </div>
             </div>
         </div>
-    
-        <!-- 原有其他动态消息（全部可见，不被遮挡） -->
+
+        <!-- 全部评论动态完整露出 -->
         <div class="post-item">
             <img src="user1.jpg" class="user-avatar">
             <div>
@@ -327,7 +231,7 @@
             <img src="user2.jpg" class="user-avatar">
             <div>
                 <h3>爱笑爱长寿</h3>
-                <p>刚学了新编的广场舞，明天早上7点文化广场教学！💃</p>
+                <p>刚学新编广场舞，明早7点文化广场教学！💃</p>
                 <div class="post-actions">
                     <button>👍 28</button>
                     <button>💬 15</button>
@@ -339,7 +243,7 @@
             <img src="user6.jpg" class="user-avatar">
             <div>
                 <h3>细菌的生命力</h3>
-                <p>钓鱼收获满满！🎣 有要鲫鱼的邻居吗？免费送两条～</p>
+                <p>钓鱼收获满满！🎣 免费送鲫鱼～</p>
                 <div class="post-actions">
                     <button>👍 45</button>
                     <button>💬 22</button>
@@ -351,7 +255,7 @@
             <img src="user4.jpg" class="user-avatar">
             <div>
                 <h3>平安喜乐</h3>
-                <p>老年大学书法班开新课啦！报名从速 📚 墨宝镇楼 ✍️</p>
+                <p>老年大学书法班开课，报名从速 📚</p>
                 <div class="post-actions">
                     <button>👍 33</button>
                     <button>💬 18</button>
@@ -363,7 +267,7 @@
             <img src="user5.jpg" class="user-avatar">
             <div>
                 <h3>上善若水</h3>
-                <p>闲置象棋棋盘赠送，带磁力折叠款，需要的私信～ ♟️</p>
+                <p>闲置磁力象棋棋盘免费送，私信领取～</p>
                 <div class="post-actions">
                     <button>👍 17</button>
                     <button>💬 6</button>
@@ -375,7 +279,7 @@
             <img src="user3.jpg" class="user-avatar">
             <div>
                 <h3>好像有羊叫</h3>
-                <p>组团去郊区采摘草莓啦！🚗 本周六出发，3个空位～</p>
+                <p>周六采摘草莓组团，还有3个空位🚗</p>
                 <div class="post-actions">
                     <button>👍 39</button>
                     <button>💬 12</button>
@@ -384,78 +288,30 @@
         </div>
     </div>
 
-    <!-- 底部导航 -->
     <div class="bottom-nav">
-        <div class="nav-item recharge" onclick="handleNavClick('会员充值2.html')">
+        <div class="nav-item" onclick="handleNavClick('会员充值2.html')">
             <i class="fas fa-coins"></i>
             <span>充值</span>
         </div>
-        <div class="nav-item nearby" onclick="handleNavClick('地图2.html')">
+        <div class="nav-item" onclick="handleNavClick('地图2.html')">
             <i class="fas fa-map-marker-alt"></i>
             <span>附近</span>
         </div>
-        <div class="nav-item profile" onclick="handleNavClick('我的.html')">
-            <i class="fas fa-user-circle"></i>
+        <div class="nav-item" onclick="handleNavClick('我的.html')">
+            <i class="fas user-circle"></i>
             <span>我的</span>
         </div>
-        <!-- 陪伴按钮 -->
-        <div class="nav-item companion" onclick="handleNavClick('陪伴.html')">
+        <div class="nav-item" onclick="handleNavClick('陪伴.html')">
             <i class="fas fa-heart"></i>
             <span>陪伴</span>
         </div>
     </div>
 
     <script>
-        // 导航点击处理
         function handleNavClick(url) {
-            // 添加点击特效
             const navItem = event.currentTarget;
-            navItem.style.transform = 'scale(0.95)';
-            
-            // 创建涟漪特效
-            const ripple = document.createElement('div');
-            ripple.style.cssText = `
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background: rgba(255,153,102,0.2);
-                border-radius: 20px;
-                animation: ripple 0.6s linear;
-                top: 0;
-                left: 0;
-            `;
-            navItem.appendChild(ripple);
-            
-            setTimeout(() => {
-                window.location.href = url;
-            }, 300);
+            setTimeout(() => window.location.href = url, 250);
         }
-
-        // 动态点赞功能
-        document.querySelectorAll('.post-actions button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const text = this.innerText.split(' ');
-                const newCount = parseInt(text[1]) + 1;
-                this.innerHTML = `${text[0]} ${newCount}`;
-                
-                // 添加点赞动画
-                this.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 200);
-            });
-        });
-
-        // 搜索功能
-        document.querySelector('.search-btn').addEventListener('click', function() {
-            const keyword = document.querySelector('.search-input').value;
-            // 这里可以添加搜索逻辑
-            console.log('搜索关键词:', keyword);
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 200);
-        });
     </script>
 </body>
 </html>
