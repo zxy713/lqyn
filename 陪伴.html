@@ -217,7 +217,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">🏥 医疗健康需求</div>
-            <div class="online-count" id="count-medical">在线 32 人</div>
+            <div class="online-count" id="count-medical">在线32人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -259,7 +259,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">🏠 生活日常照料</div>
-            <div class="online-count" id="count-life">在线 25 人</div>
+            <div class="online-count" id="count-life">在线25人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -285,7 +285,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">☀️ 日间陪护聊天</div>
-            <div class="online-count" id="count-day">在线 23 人</div>
+            <div class="online-count" id="count-day">在线23人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -311,7 +311,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">🎨 娱乐兴趣爱好</div>
-            <div class="online-count" id="count-fun">在线 28 人</div>
+            <div class="online-count" id="count-fun">在线28人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -337,7 +337,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">📱 智能手机教学</div>
-            <div class="online-count" id="count-tech">在线 21 人</div>
+            <div class="online-count" id="count-tech">在线21人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -362,7 +362,7 @@
     <div class="category-card">
         <div class="category-header">
             <div class="category-title">💛 情感心灵倾听</div>
-            <div class="online-count" id="count-heart">在线 26 人</div>
+            <div class="online-count" id="count-heart">在线26人</div>
         </div>
         <div class="member-list">
             <div class="member-item">
@@ -382,28 +382,6 @@
             </div>
         </div>
     </div>
-
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-    let medicalNum = document.querySelector('#count-medical').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-medical').innerText = `在线 ${medicalNum} 人`;
-
-    let lifeNum = document.querySelector('#count-life').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-life').innerText = `在线 ${lifeNum} 人`;
-
-    let dayNum = document.querySelector('#count-day').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-day').innerText = `在线 ${dayNum} 人`;
-
-    let funNum = document.querySelector('#count-fun').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-fun').innerText = `在线 ${funNum} 人`;
-
-    let techNum = document.querySelector('#count-tech').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-tech').innerText = `在线 ${techNum} 人`;
-
-    let heartNum = document.querySelector('#count-heart').parentNode.nextElementSibling.querySelectorAll('.member-item').length;
-    document.getElementById('count-heart').innerText = `在线 ${heartNum} 人`;
-})
-</script>
-
+    
 </body>
 </html>
